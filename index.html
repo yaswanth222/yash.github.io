@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Virtual Try-On</title>
+    <style>
+        #image-preview {
+            width: 200px;
+            height: 200px;
+            border: 2px dashed #cccccc;
+            margin-bottom: 10px;
+        }
+        .preview-image {
+            max-width: 100%;
+            max-height: 100%;
+        }
+    </style>
+</head>
+<body>
+    <h1>Virtual Try-On</h1>
+
+    <p>Upload your photo:</p>
+    <input type="file" id="user-photo" accept="image/*" />
+
+    <p>Upload the clothing photo:</p>
+    <input type="file" id="clothing-photo" accept="image/*" />
+
+    <div id="image-preview">
+        <img id="preview-user-photo" class="preview-image" src="#" alt="User photo preview" hidden>
+        <img id="preview-clothing-photo" class="preview-image" src="#" alt="Clothing photo preview" hidden>
+    </div>
+
+    <button id="try-on-button" disabled>Try On</button>
+
+    <script>
+        document.getElementById('user-photo').addEventListener('change', function (event) {
+            previewImage(event, 'preview-user-photo');
+        });
+
+        document.getElementById('clothing-photo').addEventListener('change', function (event) {
+            previewImage(event, 'preview-clothing-photo');
+        });
+
+        function previewImage(event, previewId) {
+            const reader = new FileReader();
+            reader.onload = function () {
+                const output = document.getElementById(previewId);
+                output.src = reader.result;
+                output.hidden = false;
+                checkIfReadyForTryOn();
+            };
+            reader.readAsDataURL(event.target.files[0]);
+        }
+
+        function checkIfReadyForTryOn() {
+            const userPhoto = document.getElementById('preview-user-photo').src;
+            const clothingPhoto = document.getElementById('preview-clothing-photo').src;
+            if (userPhoto && clothingPhoto) {
+                document.getElementById('try-on-button').disabled = false;
+            }
+        }
+
+        document.getElementById('try-on-button').addEventListener('click', function () {
+            // Logic for sending the images to the backend for processing goes here.
+            alert('Sending images to the server for processing...');
+        });
+    </script>
+</body>
+</html>
